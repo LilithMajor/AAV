@@ -1,16 +1,14 @@
 import java.util.ArrayList;
 
 public class Main {
-<<<<<<< HEAD
-
-
+	private SacADos sac = new SacADos(100);
+	private ArrayList<ObjetV> liste = remplir();
+	private Trieur tri1 = new Trieur(liste, sac);
 	
-	public ArrayList<ObjetV> tri(ArrayList<ObjetV> objs){
-		return objs;
+	
+	private ArrayList<ObjetV> remplir(){
+		ArrayList<ObjetV> liste = new ArrayList<ObjetV>();
 		
+		return liste;
 	}
-=======
-	ArrayList<ObjetV> list = new ArrayList<ObjetV>();
-	Trieur tri1 = new Trieur(ArrayList<ObjetV> list, SacADos sac);
->>>>>>> 1873b1a5cce32db29b4cbdd4498a50c5e2b1846b
 }
