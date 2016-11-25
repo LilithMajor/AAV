@@ -1,0 +1,10 @@
+import java.util.ArrayList;
+
+public class Trieur {
+
+	private ArrayList<ObjetV> objets;
+	
+	public Trieur(ArrayList<ObjetV> obj){
+		objets = obj;
+	}
+}

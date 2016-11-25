@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+
+public class SacADos {
+	private ArrayList<ObjetV> objets;
+	private double poids = 0;
+	private double poidsMax;
+	
+	public SacADos(double poidsmax){
+		this.poidsMax = poidsmax;
+	}
+	
+	public void ajouterObjets(ObjetV obj){
+		objets.add(obj);
+	}
+	
+	public void getPoids(){
+		return poids;
+	}
+	
+	public void getPoidsMax(){
+		return poidsMax;
+	}
+}
+

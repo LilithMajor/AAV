@@ -1,0 +1,11 @@
+import java.util.ArrayList;
+
+public class SacADos {
+	private ArrayList<ObjetV> objets;
+	private double poidsMax;
+	
+	public void setObjets(ArrayList<ObjetV> obj){
+		objets = obj;
+	}
+}
+

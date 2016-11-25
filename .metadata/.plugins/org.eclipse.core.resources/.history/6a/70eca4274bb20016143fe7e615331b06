@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+
+public class Trieur {
+
+	private ArrayList<ObjetV> objets;
+	private SacADos sac;
+	
+	public Trieur(ArrayList<ObjetV> obj, SacADos sac){
+		objets = obj;
+		this.sac = sac;
+	}
+	
+	public ArrayList<ObjetV> tri(){
+		ArrayList.sort(new ObjetVComparator());
+		return objets;
+	}
+	
+	public void remplissage(){
+		sac.setObjets(objets);
+	}
+}

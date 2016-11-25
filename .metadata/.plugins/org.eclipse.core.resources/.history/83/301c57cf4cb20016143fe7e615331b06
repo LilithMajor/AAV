@@ -1,0 +1,18 @@
+import java.util.ArrayList;
+
+public class Main {
+	private SacADos sac = new SacADos(100);
+	private ArrayList<ObjetV> liste = new ArrayList<ObjetV>();
+	private Trieur tri1 = new Trieur(liste, sac);
+	
+	private ArrayList<ObjetV> remplir(){
+		ArrayList<ObjetV> liste = new ArrayList<ObjetV>();
+		
+		liste.add(new ObjetV(13, 7));
+		liste.add(new ObjetV(8, 3));
+		liste.add(new ObjetV(12, 4));
+		liste.add(new ObjetV(10, 3));
+		
+		return liste;
+	}
+}
