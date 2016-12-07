@@ -18,7 +18,6 @@ public class Trieur {
 	}
 	
 	public void remplissage(){
-		int[lol;
 //		for(ObjetV o : objets){
 //			if (sac.getPoids() + o.getPoids() <= sac.getPoidsMax()){
 //				sac.ajouterObjets(o);
