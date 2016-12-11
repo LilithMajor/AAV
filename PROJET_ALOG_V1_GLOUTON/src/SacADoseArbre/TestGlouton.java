@@ -1,9 +1,11 @@
-package progDynamique;
-
-
+package SacADoseArbre;
 import java.util.ArrayList;
 
+import javax.swing.SingleSelectionModel;
+
 import org.junit.Test;
+
+import SacADoseArbre.ObjetV;
 
 public class TestGlouton {
 
@@ -17,11 +19,12 @@ public class TestGlouton {
 		liste.add(new ObjetV(10, 3));
 		Trieur tri1 = new Trieur(liste, sac);
 		
-		tri1.tri();
+		//tri1.tri();
 		tri1.remplissage();
+		System.out.println(tri1.getArbe().toString());
 		
-		System.out.println(tri1.getObjets());
-		System.out.println(tri1.getSac().getObjets());
+		/*System.out.println(tri1.getObjets());
+		System.out.println(tri1.getSac().getObjets());*/
 		
 	}
 
