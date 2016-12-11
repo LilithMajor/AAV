@@ -21,7 +21,7 @@ public class TestGlouton {
 		//tri1.remplissage();
 		
 		System.out.println(tri1.getObjets());
-		System.out.println(tri1.getSac().getObjets());
+		//System.out.println(tri1.getSac().getObjets());
 		
 	}
 

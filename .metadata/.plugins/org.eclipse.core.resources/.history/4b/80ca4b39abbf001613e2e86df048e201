@@ -40,7 +40,7 @@ public class Trieur {
 				i--;
 			}
 			j = (int) (j - objets.get(i).getPoids());
-			if(j >= 0)
+			if(j > 0)
 				sac.ajouterObjets(objets.get(i));
 			i--;
 		}

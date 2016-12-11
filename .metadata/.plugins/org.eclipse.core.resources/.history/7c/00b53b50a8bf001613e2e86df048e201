@@ -23,7 +23,7 @@ public class Trieur {
 				matrice[0][j] = objets.get(0).getValeur();
 		}
 		for(int i = 1; i < nbrObjs; i++){
-			for(int j = 0; j <= maxContenance; j++){
+			for(int j = 0; j < maxContenance; j++){
 				if(objets.get(i).getPoids() > j)
 					matrice[i][j] = matrice[i-1][j];
 				else
@@ -31,7 +31,7 @@ public class Trieur {
 			}
 		}
 		int i = nbrObjs - 1;
-		int j = maxContenance;
+		int j = maxContenance - 1;
 		while(matrice[i][j] == matrice[i][j - 1]){
 			j--;
 		}
@@ -40,7 +40,7 @@ public class Trieur {
 				i--;
 			}
 			j = (int) (j - objets.get(i).getPoids());
-			if(j >= 0)
+			if(j > 0)
 				sac.ajouterObjets(objets.get(i));
 			i--;
 		}
