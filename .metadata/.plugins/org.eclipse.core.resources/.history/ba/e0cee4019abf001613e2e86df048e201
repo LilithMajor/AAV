@@ -1,0 +1,46 @@
+package progDynamique;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Trieur {
+
+	private ArrayList<ObjetV> objets;
+	private SacADos sac;
+	private static final int nbrObjs = 4;
+	
+	public Trieur(ArrayList<ObjetV> obj, SacADos sac){
+		objets = obj;
+		this.sac = sac;
+	}
+	
+	public ArrayList<ObjetV> tri(){
+		int maxContenance = (int) (sac.getPoidsMax());
+		double[][] matrice = new double[nbrObjs][maxContenance + 1];
+		for(int j = 0; j < maxContenance; j++){
+			if(sac.getObjets().get(0).getPoids() > j)
+				matrice[0][j] = 0;
+		}
+//		Collections.sort(objets);
+		return objets;
+	}
+	
+	public void remplissage(){
+//		for(ObjetV o : objets){
+//			if (sac.getPoids() + o.getPoids() <= sac.getPoidsMax()){
+//				sac.ajouterObjets(o);
+//			}
+//			else{
+//				System.out.println("Plus de place");
+//				break;
+//			}
+//		}
+	}
+	
+	public ArrayList<ObjetV> getObjets(){
+		return objets;
+	}
+	
+	public SacADos getSac(){
+		return sac;
+	}
+}
