@@ -1,3 +1,4 @@
+package autre;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -5,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import SacADoseArbre.ObjetV;
 
 public class Sac {
 	private float poidsMax;
@@ -62,31 +65,35 @@ public class Sac {
 	}
 
 	public void init(String nom) {
-		try {
-			File f = new File(nom);//"items.txt"
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-
-			try {
-				String line = br.readLine();
-
-				while (br.readLine() != null) {
-					//System.out.println(line);
-					String[] decoupe = line.split(";");
-					line = br.readLine();
-					objetsPossible
-							.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
-				}
-				String[] decoupe = line.split(";");
-				objetsPossible.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
-				br.close();
-				fr.close();
-			} catch (IOException exception) {
-				System.out.println("Erreur lors de la lecture : " + exception.getMessage());
-			}
-		} catch (FileNotFoundException exception) {
-			System.out.println("Le fichier n'a pas été trouvé");
-		}
+//		try {
+//			File f = new File(nom);//"items.txt"
+//			FileReader fr = new FileReader(f);
+//			BufferedReader br = new BufferedReader(fr);
+//
+//			try {
+//				String line = br.readLine();
+//
+//				while (br.readLine() != null) {
+//					//System.out.println(line);
+//					String[] decoupe = line.split(";");
+//					line = br.readLine();
+//					objetsPossible
+//							.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
+//				}
+//				String[] decoupe = line.split(";");
+//				objetsPossible.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
+//				br.close();
+//				fr.close();
+//			} catch (IOException exception) {
+//				System.out.println("Erreur lors de la lecture : " + exception.getMessage());
+//			}
+//		} catch (FileNotFoundException exception) {
+//			System.out.println("Le fichier n'a pas été trouvé");
+//		}
+		objetsPossible.add(new Objet("1", 13, 7));
+		objetsPossible.add(new Objet("2", 12, 4));
+		objetsPossible.add(new Objet("3", 8, 3));
+		objetsPossible.add(new Objet("4", 10, 3));
 	}
 
 	public float methodeGloutone() {
@@ -142,13 +149,15 @@ public class Sac {
 		return this.calculerValeur();
 	}
 	
-	public float methodePSE(){
-		float inf = this.methodeGloutone();
-		Arbre test = new Arbre(new ArrayList<Objet>());
-		test.init(this.getListeObjetPossible());
-		System.out.println("nombre d'element dans l'arbre : " + test.nombreElement());
+	public float methodePSE(/*liste*/){
+		float inf = this.methodeGloutone(); //ça je sais pas a quoi ça va nous servir mais bon
+		System.out.println("truc : " + inf);
+		Arbre test = new Arbre(new ArrayList<Objet>());//Logique
+		test.init(this.getListeObjetPossible());//Liste d'objets de base. pour nous = liste
+		//System.out.println("nombre d'element dans l'arbre : " + test.nombreElement());
 		ArrayList<Objet> res = new ArrayList<Objet>();
-		res = test.getSolution(inf, this.getListeObjetPossible(), res, this.poidsMax);
+		res = test.getSolution(inf, this.getListeObjetPossible(), res, this.poidsMax);//OK
+		System.out.println(res);
 		float val = 0;
 		for (int i = 0; i < res.size(); ++i) {
 			val += res.get(i).getValeur();

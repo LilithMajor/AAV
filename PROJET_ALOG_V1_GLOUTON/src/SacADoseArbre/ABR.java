@@ -4,21 +4,19 @@ import java.util.ArrayList;
 
 import javax.swing.tree.*;
 
+import autre.Arbre;
+import autre.Objet;
+
 public class ABR {
-	private ObjetV valeur;
+	private ArrayList<ObjetV> valeur;
 	private ABR sousArbreGauche;
 	private ABR sousArbreDroit;
 	
-	public ABR(int i, ObjetV v){
-		if (i < 0){
-			return;
-		}
-		this.valeur = v;
-		this.sousArbreDroit =  new ABR(i-1, new ObjetV(0,0));
-		this.sousArbreGauche = new ABR(i-1, new ObjetV(0,0));
+	public ABR(ArrayList<ObjetV> objets) {
+		this.valeur = objets;
 	}
 	
-	public ObjetV getValeur(){
+	public ArrayList<ObjetV> getValeur(){
 		return this.valeur;
 	}
 	
@@ -26,57 +24,115 @@ public class ABR {
 		return this.sousArbreGauche;
 	}
 	
-	public void remplissage(ArrayList<ObjetV> objs, int i){
-		if (i < this.hauteur()-1){
-			sousArbreGauche.setValeur(valeur);
-			sousArbreGauche.remplissage(objs, i);
-			sousArbreDroit.setValeur(objs.get(i++));
-			sousArbreDroit.remplissage(objs, i);
-		}
-		else {
-			return;
+//	public void remplissage(ArrayList<ObjetV> objs, int i){
+//		if (i < this.hauteur()-1){
+//			sousArbreGauche.setValeur(valeur);
+//			sousArbreGauche.remplissage(objs, i);
+//			sousArbreDroit.setValeur(objs.get(i++));
+//			sousArbreDroit.remplissage(objs, i);
+//		}
+//		else {
+//			return;
+//		}
+//	}
+	
+	public void initialize(ArrayList<ObjetV> objets) {
+		if (objets.size() > 0) {
+			ArrayList<ObjetV> clone = new ArrayList<ObjetV>(this.valeur);// this.liste;
+			clone.add(objets.get(0));
+			this.insertion(clone);
+			this.insertion(this.valeur);
+	        this.sousArbreGauche.initialize(this.getNewTab(objets));
+	        this.sousArbreDroit.initialize(this.getNewTab(objets));
 		}
 	}
+	
+	public ArrayList<ObjetV> getNewTab(ArrayList<ObjetV> o) {
+		ArrayList<ObjetV> nouv = new ArrayList<ObjetV>();
+		nouv.addAll(o);
+		nouv.remove(0);
+		return nouv;
+	}
+	
+//	public ArrayList<Objet> getNewTab(ArrayList<Objet> o) {
+//		ArrayList<Objet> nouv = new ArrayList<Objet>();
+//		nouv.addAll(o);
+//		nouv.remove(0);
+//		return nouv;
+//	}
 	
 	public ABR getSousArbreDroit(){
 		return this.sousArbreDroit;
 	}
 	
-	/*public void insertion(ObjetV valeur){
-		if (this.valeur == null){
-			this.valeur = valeur;
+	
+	public void insertion(ArrayList<ObjetV> objets) {
+		if (this.valeur.equals(objets)) {
+			if (this.getSousArbreGauche() != null)
+				this.getSousArbreGauche().insertion(objets);
+			else
+				this.sousArbreGauche = new ABR(objets);
+		} else {
+			if (this.getSousArbreDroit() != null)
+				this.getSousArbreDroit().insertion(objets);
+			else
+				this.sousArbreDroit = new ABR(objets);
 		}
-		if (valeur == getValeur()){
-			return;
+	}
+	
+	public ArrayList<ObjetV> tri(double var, ArrayList<ObjetV> objets, ArrayList<ObjetV> retour, double poidsMax){
+		double valeurHaute = 0;
+		double valeur = 0;
+		for (int i = 0; i < retour.size(); ++i)
+			valeur += retour.get(i).getValeur();
+		if (objets != null) {
+			valeurHaute = this.getValeurObjets();
+			if(!this.valeur.isEmpty()){
+				for (int i = objets.size() - this.hauteur(); i < objets.size(); ++i) {
+					valeurHaute += objets.get(i).getValeur();
+				}
+			}
+			else
+				valeurHaute = var;
+			if (this.getValeurObjets() > valeur && this.getPoidsListe()<=poidsMax) {
+				retour = this.valeur;
+			}
+			if (this.getValeurObjets() > var)
+				var = this.getValeurObjets();
 		}
-		if(valeur.getNum() < this.hauteur()){
-			if (getSousArbreGauche() != null){
-				getSousArbreGauche().insertion(valeur);
+		if (valeurHaute >= var) {
+			if (this.sousArbreGauche != null) {
+				retour = this.sousArbreGauche.tri(var, objets, retour, poidsMax);
 			}
-			else {
-				this.sousArbreGauche = new ABR();
-				this.getSousArbreGauche().setValeur(valeur);
-			}
-		}
-		if (valeur.getNum() > this.hauteur()){
-			if (getSousArbreDroit() != null){
-				getSousArbreDroit().insertion(valeur);
-			}
-			else {
-				this.sousArbreDroit = new ABR(valeur, null, null);
+			if (this.sousArbreDroit != null) {
+				retour = this.sousArbreDroit.tri(var, objets, retour, poidsMax);
 			}
 		}
-	}*/
+		return retour;
+	}
+	
+	private double getValeurObjets() {//A renommer (tu peux meme changer sa boucle for degueulasse par une for each
+		double val = 0;
+		for (int i = 0; i < this.valeur.size(); ++i) {
+			val += valeur.get(i).getValeur();
+		}
+		return val;
+	}
+	
+	public double getPoidsListe() {// idem
+		double poids = 0;
+		for (int i = 0; i < this.valeur.size(); ++i) {
+			poids += this.valeur.get(i).getPoids();
+		}
+		return poids;
+	}
 	
 	public int hauteur(){
-		if (this.valeur == null){
+		//
+		if (this.valeur == null|| this.sousArbreDroit==null) {
 			return 0;
-		}
-		else {
-			int hSAG = sousArbreGauche.hauteur();
-			int hSAD = sousArbreDroit.hauteur();
-			System.out.println(1 + ((hSAD > hSAG) ? hSAG : hSAD));
-			return 1 + ((hSAD > hSAG) ? hSAG : hSAD);
+		} else {
+			return Math.max(this.sousArbreDroit.hauteur(), this.sousArbreGauche.hauteur()) + 1;
 		}
 	}
 	
@@ -112,9 +168,9 @@ public class ABR {
 		sousArbreGauche = ta;
 	}*/
 
-	public void setValeur(ObjetV v) {
-		this.valeur = v;
-	}
+//	public void setValeur(ObjetV v) {
+//		this.valeur = v;
+//	}
 
 	public String toString(){
 		return this.toString("\t");

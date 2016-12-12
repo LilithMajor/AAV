@@ -1,0 +1,164 @@
+package autre;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Sac {
+	private float poidsMax;
+	private float poids;
+	private ArrayList<Objet> objets;
+	private ArrayList<Objet> objetsPossible;
+
+	public Sac() {
+		objets = new ArrayList<Objet>();
+		objetsPossible = new ArrayList<Objet>();
+		this.poids = 0;
+		//this.poidsMax=poidsMax;
+	}
+	
+	public void setPoidsMax(float poidsMax){
+		this.poidsMax=poidsMax;
+	}
+
+	public void ajouterObjet(Objet o) {
+		if (this.poids + o.getPoids() < poidsMax) {
+			this.objets.add(o);
+			this.poids += o.getPoids();
+		}
+	}
+
+	public float getPoidsMax() {
+		return this.poidsMax;
+	}
+
+	public float getPoids() {
+		return this.poids;
+	}
+
+	public float calculerValeur() {
+		float val = 0;
+		for (int i = 0; i < this.objets.size(); ++i) {
+			//System.out.println(objets.get(i).toString());
+			val += objets.get(i).getValeur();
+		}
+		//System.out.println(val);
+		return val;
+	}
+
+	public String toString() {
+		String liste = "Objets dans le sac : \n";
+		for (Objet o : this.objets) {
+			liste += o.toString() + "\n";
+		}
+		return liste;
+	}
+	
+	public void viderSac(){
+		this.objets.clear();
+		this.poids = 0;
+	}
+
+	public void init(String nom) {
+		try {
+			File f = new File(nom);//"items.txt"
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+
+			try {
+				String line = br.readLine();
+
+				while (br.readLine() != null) {
+					//System.out.println(line);
+					String[] decoupe = line.split(";");
+					line = br.readLine();
+					objetsPossible
+							.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
+				}
+				String[] decoupe = line.split(";");
+				objetsPossible.add(new Objet(decoupe[0], Float.parseFloat(decoupe[1]), Float.parseFloat(decoupe[2])));
+				br.close();
+				fr.close();
+			} catch (IOException exception) {
+				System.out.println("Erreur lors de la lecture : " + exception.getMessage());
+			}
+		} catch (FileNotFoundException exception) {
+			System.out.println("Le fichier n'a pas été trouvé");
+		}
+	}
+
+	public float methodeGloutone() {
+		if (this.objets.size()>0)
+			this.viderSac();
+		objetsPossible.sort(Collections.reverseOrder(null));
+		for (int i = 0; i < objetsPossible.size(); i++) {
+			if (this.getPoids() + objetsPossible.get(i).getPoids() <= this.getPoidsMax()) {
+				this.ajouterObjet(objetsPossible.get(i));
+			}
+		}/*
+		System.out.println(this.toString());
+		System.out.println("val: " + this.calculerValeur());
+		System.out.println("poids: " + this.getPoids());*/
+		return this.calculerValeur();
+	}
+
+	public float methodeDynamique(){
+		if (this.objets.size()>0)
+			this.viderSac();
+		float mat[][] = new float[objetsPossible.size()][((int) this.getPoidsMax()*10) + 1];
+		for (int j = 0; j < this.getPoidsMax()*10 + 1; j++) {
+			if (objetsPossible.get(0).getPoids()*10 > j)
+				mat[0][j] = 0;
+			else
+				mat[0][j] = objetsPossible.get(0).getValeur();
+		}
+
+		for (int i = 1; i < mat.length; i++) {
+			for (int j = 0; j < mat[i].length; j++) {
+				if (objetsPossible.get(i).getPoids()*10 > j)
+					mat[i][j] = mat[i - 1][j];
+				else
+					mat[i][j] = Math.max(mat[i - 1][j],
+							mat[i - 1][(int) (j - objetsPossible.get(i).getPoids()*10)] + objetsPossible.get(i).getValeur());
+			}
+		}
+		int j = mat[0].length - 1;
+		while (mat[mat.length - 1][j] == mat[mat.length - 1][j - 1])
+			--j;
+		int i = mat.length - 1;
+		while (j>0 && i>=0){
+			while (i>0 && (mat[i][j] == mat[i-1][j]))
+				--i;
+			//System.out.println("i : " + i);
+			j = (int)(j - objetsPossible.get(i).getPoids()*10);
+			if (j >= 0)
+				//System.out.println(objetsPossible.get(i).toString());
+				this.ajouterObjet(objetsPossible.get(i));
+			i--;
+		}
+		//System.out.println("debut calcul valeur");
+		return this.calculerValeur();
+	}
+	
+	public float methodePSE(/*liste*/){
+		float inf = this.methodeGloutone(); //ça je sais pas a quoi ça va nous servir mais bon
+		Arbre test = new Arbre(new ArrayList<Objet>());//Logique
+		test.init(this.getListeObjetPossible());//Liste d'objets de base. pour nous = liste
+		//System.out.println("nombre d'element dans l'arbre : " + test.nombreElement());
+		ArrayList<Objet> res = new ArrayList<Objet>();
+		res = test.getSolution(inf, this.getListeObjetPossible(), res, this.poidsMax);//OK
+		float val = 0;
+		for (int i = 0; i < res.size(); ++i) {
+			val += res.get(i).getValeur();
+		}
+		System.out.println(val);
+		return val;
+	}
+
+	public ArrayList<Objet> getListeObjetPossible() {
+		return objetsPossible;
+	}
+}

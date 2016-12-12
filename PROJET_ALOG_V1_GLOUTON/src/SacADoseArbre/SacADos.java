@@ -28,5 +28,9 @@ public class SacADos {
 	public ArrayList<ObjetV> getObjets(){
 		return objets;
 	}
+	
+	public void setObjets(ArrayList<ObjetV> objs){
+		this.objets = objs;
+	}
 }
 

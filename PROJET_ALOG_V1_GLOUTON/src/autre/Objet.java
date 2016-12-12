@@ -1,4 +1,4 @@
-
+package autre;
 public class Objet implements Comparable<Objet>{
 	String nom;
 	float valeur;

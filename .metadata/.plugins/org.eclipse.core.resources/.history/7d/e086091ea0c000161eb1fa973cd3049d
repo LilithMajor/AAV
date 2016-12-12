@@ -1,0 +1,172 @@
+package SacADoseArbre;
+
+import java.util.ArrayList;
+
+import javax.swing.tree.*;
+
+import autre.Objet;
+
+public class ABR {
+	private ArrayList<ObjetV> valeur;
+	private ABR sousArbreGauche;
+	private ABR sousArbreDroit;
+	
+	public ABR(ArrayList<ObjetV> objets) {
+		this.valeur = objets;
+	}
+	
+	public ObjetV getValeur(){
+		return this.valeur;
+	}
+	
+	public ABR getSousArbreGauche(){
+		return this.sousArbreGauche;
+	}
+	
+	public void remplissage(ArrayList<ObjetV> objs, int i){
+		if (i < this.hauteur()-1){
+			sousArbreGauche.setValeur(valeur);
+			sousArbreGauche.remplissage(objs, i);
+			sousArbreDroit.setValeur(objs.get(i++));
+			sousArbreDroit.remplissage(objs, i);
+		}
+		else {
+			return;
+		}
+	}
+	
+	public ABR getSousArbreDroit(){
+		return this.sousArbreDroit;
+	}
+	
+	/*public void insertion(ObjetV valeur){
+		if (this.valeur == null){
+			this.valeur = valeur;
+		}
+		if (valeur == getValeur()){
+			return;
+		}
+		if(valeur.getNum() < this.hauteur()){
+			if (getSousArbreGauche() != null){
+				getSousArbreGauche().insertion(valeur);
+			}
+			else {
+				this.sousArbreGauche = new ABR();
+				this.getSousArbreGauche().setValeur(valeur);
+			}
+		}
+		if (valeur.getNum() > this.hauteur()){
+			if (getSousArbreDroit() != null){
+				getSousArbreDroit().insertion(valeur);
+			}
+			else {
+				this.sousArbreDroit = new ABR(valeur, null, null);
+			}
+		}
+	}*/
+	
+	public int hauteur(){
+		if (this.valeur == null){
+			return 0;
+		}
+		else {
+			int hSAG = sousArbreGauche.hauteur();
+			int hSAD = sousArbreDroit.hauteur();
+			System.out.println(1 + ((hSAD > hSAG) ? hSAG : hSAD));
+			return 1 + ((hSAD > hSAG) ? hSAG : hSAD);
+		}
+		//
+		if (this.liste == null|| this.sousArbreDroit==null) {
+			return 0;
+		} else {
+			return Math.max(this.sousArbreDroit.hauteur(), this.sousArbreGauche.hauteur()) + 1;
+		}
+	}
+	
+	public boolean estEquilibre(){
+		if (this.valeur == null){
+			return true;
+		}
+		else{
+			return (Math.abs(sousArbreGauche.hauteur() - sousArbreDroit.hauteur()) <= 1 && sousArbreGauche.estEquilibre()
+					&& sousArbreDroit.estEquilibre());
+		}
+	}
+	
+	/*public void rotationDroite(){
+		float tv = getValeur();
+		setValeur(sousArbreGauche.getValeur());
+		sousArbreGauche.setValeur(tv);
+		ABR ta = this.sousArbreGauche;
+		sousArbreGauche = this.sousArbreGauche.sousArbreGauche;
+		ta.sousArbreGauche = ta.sousArbreDroit;
+		ta.sousArbreDroit = sousArbreDroit;
+		sousArbreDroit = ta;
+	}*/
+	
+	/*public void rotationGauche(){
+		float tv = getValeur();
+		setValeur(sousArbreDroit.getValeur());
+		sousArbreDroit.setValeur(tv);
+		ABR ta = this.sousArbreDroit;
+		sousArbreDroit = this.sousArbreDroit.sousArbreDroit;
+		ta.sousArbreDroit = ta.sousArbreGauche;
+		ta.sousArbreGauche = sousArbreGauche;
+		sousArbreGauche = ta;
+	}*/
+
+	public void setValeur(ObjetV v) {
+		this.valeur = v;
+	}
+
+	public String toString(){
+		return this.toString("\t");
+	}
+	
+	public String toString(String s){
+		if (this.sousArbreGauche != null){
+			if (this.sousArbreDroit != null){
+				return (s+valeur+"\n"+this.sousArbreGauche.toString(s+"\t") + this.sousArbreDroit.toString(s+"\t"));
+			}
+			else {
+				return (s+valeur+"\n"+sousArbreGauche.toString(s+"\t")+"\n");
+			}
+		}
+		else {
+			if (sousArbreDroit!=null){
+				return (s+valeur+"\n"+sousArbreDroit.toString(s+"\t")+"\n");
+			}
+			else {
+				return(s+valeur+"\n");
+			}
+		}
+	}
+	
+	/*public void ajouterEq(float v){
+		if(this.valeur == null){
+			this.valeur = v;
+			this.sousArbreGauche = new ABR();
+			this.sousArbreDroit = new ABR();
+		}
+		else {
+			if(v < this.valeur){
+				this.sousArbreGauche.ajouterEq(v);
+				if (!(estEquilibre())){
+					if((sousArbreGauche.sousArbreGauche==null) || (sousArbreGauche.sousArbreGauche.hauteur() < sousArbreGauche.sousArbreDroit.hauteur())){
+						sousArbreGauche.rotationGauche();
+					}
+					rotationDroite();
+				}
+			}
+			else {
+				this.sousArbreDroit.ajouterEq(v);
+				if(!(estEquilibre())){
+					if((sousArbreDroit.sousArbreDroit==null) || (sousArbreDroit.sousArbreDroit.hauteur() < sousArbreDroit.sousArbreGauche.hauteur())){
+					sousArbreDroit.rotationDroite();
+					}
+					rotationGauche();
+				}
+			}
+		}
+	}*/
+}
